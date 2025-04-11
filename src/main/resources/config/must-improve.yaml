@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  QWordsWordFiles:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: "qwords-word-files"
+
+  QWordsWordFilesPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref QWordsWordFiles
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            Principal: '*'
+            Resource: !Join
+              - ''
+              - - 'XXXXXXXXXXXXX'
+                - !Ref QWordsWordFiles
+                - /*
+            Sid: PublicReadGetObject
