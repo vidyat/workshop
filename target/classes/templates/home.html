@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QWords - Welcome</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <base th:href="@{|${@environment.getProperty('app.base-url')}|}" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .home-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            max-height: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .logo:hover {
+            transform: rotate(10deg);
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+        .shake {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+
+<body>
+    <div class="container home-container">
+        <h1 class="text-center mb-4">
+            <img src="Q.png" alt="Q" class="img-fluid logo"> Words
+        </h1>
+        <form method="get" th:action="@{|${@environment.getProperty('app.base-url')}game|}" class="mb-3">
+            <div class="mb-3">
+                <label for="user" class="form-label">Please enter your name:</label>
+                <input type="text" class="form-control" name="user" required pattern="[a-zA-Z]{1,15}" title="Enter your name (1-15 letters)" id="user">
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Play</button>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{/js/game.js(v=${#dates.format(#dates.createNow(), 'yyyyMMddHHmmss')})}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const userInput = document.getElementById('user');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = userInput.value.trim();
+                
+                if (name.length > 0 && name.length <= 15) {
+                    userInput.classList.add('fade-out');
+                    setTimeout(() => {
+                        form.submit();
+                    }, 500);
+                } else {
+                    shakeElement(userInput);
+                }
+            });
+
+            function shakeElement(element) {
+                element.classList.add('shake');
+                setTimeout(() => {
+                    element.classList.remove('shake');
+                }, 820);
+            }
+        });
+    </script>
+</body>
+
+</html>
